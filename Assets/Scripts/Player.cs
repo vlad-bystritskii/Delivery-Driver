@@ -5,14 +5,31 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField]
-    private float _speed = 3;
+    private float _speed = 5;
+
     [SerializeField]
-    private float _rotateSpeed = 3;
+    private float _rotateSpeed = 90;
+
     private void Update()
     {
-        Vector3 direction = new Vector3(0, Input.GetAxis("Vertical"), 0);
-        transform.Translate(direction * _speed * Time.deltaTime);
-        Vector3 rotation = new Vector3(0, 0, -1 * Input.GetAxis("Horizontal"));
-        transform.Rotate(rotation * _rotateSpeed * Time.deltaTime);
+        float v = Input.GetAxis("Vertical") * _speed * Time.deltaTime;
+        float h;
+
+        if (v > 0)
+        {
+            h = Input.GetAxis("Horizontal") * _rotateSpeed * Time.deltaTime * -1;
+        }
+        else if (v < 0)
+        {
+            h = Input.GetAxis("Horizontal") * _rotateSpeed * Time.deltaTime * 1;
+        }
+        else
+        {
+            h = 0;
+        }
+        Vector3 vertical = transform.TransformDirection(Vector3.up);
+        transform.localPosition += vertical * v;
+
+        transform.Rotate(new Vector3(0, 0, h));
     }
 }
